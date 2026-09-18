@@ -945,7 +945,10 @@ function monitorarStatusLoja() {
                 overlay.style.display = 'none';
                 document.body.style.overflow = 'auto';
             } else {
+<<<<<<< HEAD
                 // Notifica que está fechado, mas não trava navegação após fechar
+=======
+>>>>>>> 72a6ede (adicionado sistema de identidade visual com opções de personalização e ajustes de estilo)
                 overlay.style.display = 'flex';
             }
         }
