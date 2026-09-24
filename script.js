@@ -835,15 +835,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!lista || !btnPrev || !btnNext) return;
 
+            let ticking = false;
             const atualizarEstadoBotoes = () => {
-                const scrollLeft = lista.scrollLeft;
-                const maxScroll = lista.scrollWidth - lista.clientWidth;
-
-                btnPrev.disabled = scrollLeft <= 5;
-                btnNext.disabled = scrollLeft >= maxScroll - 5;
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const scrollLeft = lista.scrollLeft;
+                        const maxScroll = lista.scrollWidth - lista.clientWidth;
+                        btnPrev.disabled = scrollLeft <= 5;
+                        btnNext.disabled = scrollLeft >= maxScroll - 5;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
             };
 
-            lista.addEventListener('scroll', atualizarEstadoBotoes, { passive: true });
+            if (!lista.dataset.scrollConfigured) {
+                lista.addEventListener('scroll', atualizarEstadoBotoes, { passive: true });
+                lista.dataset.scrollConfigured = "true";
+            }
             atualizarEstadoBotoes();
         });
     }
@@ -893,34 +902,95 @@ document.addEventListener('DOMContentLoaded', () => {
         filtrarCardapio('');
     };
 
-    // --- Sincronização do Menu de Categorias no Scroll ---
+    // --- Sincronização e Navegação Fluida do Menu no Scroll ---
 
     const navLinks = document.querySelectorAll('.menu-categorias a');
     const sections = document.querySelectorAll('.secao-categoria');
+    let isClickScrolling = false;
+    let scrollTimeout = null;
 
-    function changeLinkStateOnScroll() {
+    function atualizarLinkAtivo() {
+        if (isClickScrolling) return;
+
         let currentSectionId = '';
+        const scrollPos = window.scrollY + 110;
+
         sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            if (window.scrollY >= sectionTop - 140) {
-                currentSectionId = section.getAttribute('id');
+            if (section.style.display !== 'none') {
+                const sectionTop = section.offsetTop;
+                if (scrollPos >= sectionTop) {
+                    currentSectionId = section.getAttribute('id');
+                }
             }
         });
 
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${currentSectionId}`) {
+        if (currentSectionId) {
+            navLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                const ativo = (href === `#${currentSectionId}`);
+                if (link.classList.contains('active') !== ativo) {
+                    link.classList.toggle('active', ativo);
+                }
+            });
+        }
+    }
+
+    let tickingScroll = false;
+    window.addEventListener('scroll', () => {
+        if (!tickingScroll) {
+            window.requestAnimationFrame(() => {
+                atualizarLinkAtivo();
+                tickingScroll = false;
+            });
+            tickingScroll = true;
+        }
+    }, { passive: true });
+
+    // Navegação ao clicar nos links do menu sem travar ou pular
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (!href || !href.startsWith('#')) return;
+
+            const targetSection = document.querySelector(href);
+            if (targetSection) {
+                e.preventDefault();
+                isClickScrolling = true;
+
+                navLinks.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
+
+                const navWrapper = document.querySelector('.menu-categorias-wrapper');
+                const offset = (navWrapper ? navWrapper.offsetHeight : 60) + 10;
+                const bodyRect = document.body.getBoundingClientRect().top;
+                const elementRect = targetSection.getBoundingClientRect().top;
+                const elementPosition = elementRect - bodyRect;
+                const offsetPosition = elementPosition - offset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    isClickScrolling = false;
+                }, 800);
             }
         });
-    }
-    window.addEventListener('scroll', changeLinkStateOnScroll, { passive: true });
+    });
 
     // Inicialização
     monitorarAdicionais();
 });
 
 // --- Monitoramento do Status da Loja ---
+
+window.fecharOverlayFechado = function() {
+    const overlay = document.getElementById('overlay-fechado');
+    if (overlay) overlay.style.display = 'none';
+    document.body.style.overflow = '';
+};
 
 function monitorarStatusLoja() {
     if (typeof firebase === 'undefined') return;
@@ -943,7 +1013,7 @@ function monitorarStatusLoja() {
         if (overlay) {
             if (estaAberta) {
                 overlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
+                document.body.style.overflow = '';
             } else {
 <<<<<<< HEAD
                 // Notifica que está fechado, mas não trava navegação após fechar
