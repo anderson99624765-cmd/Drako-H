@@ -1,0 +1,89 @@
+.secao { margin-top: 24px; margin-bottom: 16px; }
+
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.titulo {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: var(--texto-escuro);
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tituloDestaque { color: var(--cor-categorias); }
+
+.badge {
+  font-size: 0.78rem;
+  color: var(--texto-mutado);
+  background: #eaecee;
+  padding: 3px 9px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Carrossel */
+.carrosselWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.lista {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 8px 4px 18px 4px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.15) transparent;
+}
+.lista::-webkit-scrollbar { height: 5px; }
+.lista::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); border-radius: 10px; }
+.lista::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+
+/* Botões de navegação desktop */
+.btnNav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--borda-suave);
+  color: var(--texto-escuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
+  transition: var(--transicao);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carrosselWrapper:hover .btnNav { opacity: 1; pointer-events: auto; }
+.btnNav:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.1);
+  color: var(--cor-principal);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.prev { left: -12px; }
+.next { right: -12px; }
+
+@media (max-width: 768px) { .btnNav { display: none; } }

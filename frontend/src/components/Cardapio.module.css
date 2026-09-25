@@ -1,0 +1,23 @@
+.buscaVazia {
+  text-align: center;
+  padding: 40px 20px;
+  background: #fff;
+  border-radius: var(--raio-card);
+  margin: 30px auto;
+  max-width: 480px;
+  box-shadow: var(--sombra-card);
+}
+.buscaIco { font-size: 3rem; margin-bottom: 12px; }
+.buscaVazia h3 { font-size: 1.2rem; color: var(--texto-escuro); margin-bottom: 6px; }
+.buscaVazia p { font-size: 0.9rem; color: var(--texto-mutado); margin-bottom: 18px; }
+
+.btnSecundario {
+  background: #f0f2f5;
+  color: var(--texto-escuro);
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: var(--transicao);
+}
+.btnSecundario:hover { background: #e2e5e8; }

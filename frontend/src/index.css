@@ -1,0 +1,59 @@
+:root {
+  /* Design tokens - controlados pelo Firebase */
+  --cor-principal: #516e03;
+  --cor-escura: #2e5902;
+  --cor-destaque: #f2f2f2;
+  --cor-fundo: #f4f5f8;
+  --fonte-titulo: #ffffff;
+  --fonte-subtitulo: rgba(255, 255, 255, 0.9);
+  --cor-categorias: #516e03;
+  --cor-categoria-ativa: #516e03;
+
+  /* Tokens fixos do design system */
+  --verde-whatsapp: #25d366;
+  --texto-escuro: #18191b;
+  --texto-mutado: #6b7280;
+  --texto-claro: #9ca3af;
+  --superficie-card: #ffffff;
+  --borda-suave: rgba(0, 0, 0, 0.07);
+  --sombra-card: 0 4px 18px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.03);
+  --sombra-card-hover: 0 12px 28px -4px rgba(0,0,0,0.12), 0 4px 8px -2px rgba(0,0,0,0.04);
+  --sombra-flutuante: 0 16px 36px -6px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.08);
+  --sombra-modal: 0 24px 60px -12px rgba(0,0,0,0.35);
+  --raio-card: 18px;
+  --raio-badge: 30px;
+  --raio-input: 12px;
+  --transicao: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+  margin: 0; padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  overflow-x: clip;
+}
+
+body {
+  width: 100%;
+  overflow-x: clip;
+  background-color: var(--cor-fundo);
+  color: var(--texto-escuro);
+  min-height: 100vh;
+  padding-bottom: 120px;
+  line-height: 1.5;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar global */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.25); }
+
+button { cursor: pointer; font-family: inherit; }
