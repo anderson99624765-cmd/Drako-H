@@ -157,9 +157,6 @@
     <footer class="site-footer">
         <p><strong>DRAKO HOUSE</strong> • Todos os direitos reservados</p>
         <p style="font-size: 0.8rem; margin-top: 4px;">Sua dose diária de felicidade em cada mordida.</p>
-        <button class="btn-acesso-admin" id="btn-abrir-admin" onclick="abrirModalAdmin()" title="Acesso Administrativo (Alt+A)">
-            <span>🔒 Acesso Restaurante</span>
-        </button>
     </footer>
 
     <!-- Barra Flutuante de Carrinho (Padrão iFood / Delivery Apps) -->
@@ -416,7 +413,7 @@
                 <!-- Login Admin -->
                 <div id="admin-login">
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">Digite a senha de administrador:</p>
-                    <input type="password" id="senha-admin" class="form-input" placeholder="Digite a senha" style="margin-bottom: 12px;">
+                    <input type="password" id="senha-admin" class="form-input" placeholder="Digite a senha" style="margin-bottom: 12px;" onkeydown="if(event.key === 'Enter') verificarSenha()">
                     <button onclick="verificarSenha()" class="btn-confirmar-adicao" style="width: 100%; justify-content: center;">Entrar</button>
                 </div>
 

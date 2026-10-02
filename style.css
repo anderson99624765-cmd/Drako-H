@@ -181,7 +181,7 @@ body {
   100% { transform: scale(0.95); opacity: 0.85; }
 }
 
-/* Logo */
+/* Logo com suporte a gesto secreto */
 .logo {
   width: 105px;
   height: 105px;
@@ -190,11 +190,47 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   margin-bottom: 12px;
   object-fit: cover;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, filter 0.25s ease;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
 }
 
 .logo:hover {
   transform: scale(1.04);
+}
+
+.logo:active {
+  transform: scale(0.96);
+}
+
+.logo.logo-tap-feedback {
+  transform: scale(0.94);
+  transition: transform 0.1s ease;
+}
+
+.logo.logo-secret-trigger {
+  animation: pulsoAcessoSecreto 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pulsoAcessoSecreto {
+  0% {
+    transform: scale(0.92);
+    box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.8), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  50% {
+    transform: scale(1.12);
+    box-shadow: 0 0 25px 6px rgba(255, 215, 0, 0.9), 0 0 40px rgba(46, 89, 2, 0.6);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    filter: brightness(1);
+  }
 }
 
 .header-text h1 {
@@ -1405,25 +1441,7 @@ body {
 }
 
 .btn-acesso-admin {
-  background: transparent;
-  border: 1px solid #ddd;
-  color: #888;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  transition: var(--transicao-suave);
-}
-
-.btn-acesso-admin:hover {
-  background: #ffffff;
-  color: var(--texto-escuro);
-  border-color: #bbb;
+  display: none !important;
 }
 
 /* Painel Admin Styles */

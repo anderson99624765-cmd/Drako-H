@@ -1014,14 +1014,100 @@ const SENHA_CORRETA = "1234";
 
 window.abrirModalAdmin = function() {
     const modal = document.getElementById('modal-admin');
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+        modal.style.display = 'flex';
+        const adminLogin = document.getElementById('admin-login');
+        const campoSenha = document.getElementById('senha-admin');
+        if (adminLogin && adminLogin.style.display !== 'none' && campoSenha) {
+            setTimeout(() => campoSenha.focus(), 150);
+        }
+    }
 };
 
+// Atalho rápido no teclado: Alt + A
 document.addEventListener('keydown', (event) => {
     if (event.altKey && (event.key === 'a' || event.key === 'A')) {
         abrirModalAdmin();
     }
 });
+
+// Acesso Secreto Oculto: Dois toques / Duplo clique na logo
+function configurarAcessoSecretoLogo() {
+    const logos = document.querySelectorAll('.logo, #logo-empresa');
+    if (!logos.length) return;
+
+    let ultimoInteracao = 0;
+    let bloqueioAtivacao = false;
+
+    function dispararAcesso(el) {
+        if (bloqueioAtivacao) return;
+        bloqueioAtivacao = true;
+
+        if (el) {
+            el.classList.add('logo-secret-trigger');
+            setTimeout(() => el.classList.remove('logo-secret-trigger'), 500);
+        }
+
+        // Feedback háptico em celulares compatíveis
+        if (navigator.vibrate) {
+            try {
+                navigator.vibrate([35, 40, 35]);
+            } catch (err) {}
+        }
+
+        setTimeout(() => {
+            abrirModalAdmin();
+            bloqueioAtivacao = false;
+        }, 220);
+    }
+
+    logos.forEach(logo => {
+        // 1. Suporte Desktop: evento nativo de duplo clique
+        logo.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            dispararAcesso(logo);
+        });
+
+        // 2. Suporte Mobile / Touch: dois toques rápidos (< 420ms)
+        let timerFeedback = null;
+        const processarToqueRapido = (e) => {
+            const agora = Date.now();
+            const intervalo = agora - ultimoInteracao;
+            ultimoInteracao = agora;
+
+            if (intervalo > 40 && intervalo < 420) {
+                // Duplo toque detectado!
+                clearTimeout(timerFeedback);
+                ultimoInteracao = 0;
+                if (e.cancelable) e.preventDefault();
+                dispararAcesso(logo);
+            } else {
+                // Toque simples: micro-reação elástica
+                logo.classList.add('logo-tap-feedback');
+                clearTimeout(timerFeedback);
+                timerFeedback = setTimeout(() => {
+                    logo.classList.remove('logo-tap-feedback');
+                }, 200);
+            }
+        };
+
+        logo.addEventListener('touchend', (e) => {
+            processarToqueRapido(e);
+        }, { passive: false });
+
+        logo.addEventListener('click', (e) => {
+            if (e.pointerType === 'touch') return;
+            processarToqueRapido(e);
+        });
+    });
+}
+
+// Inicializa o detector da logo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', configurarAcessoSecretoLogo);
+} else {
+    configurarAcessoSecretoLogo();
+}
 
 window.verificarSenha = function () {
     const campoSenha = document.getElementById('senha-admin');
